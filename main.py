@@ -31,7 +31,7 @@ def insertProduct():
         cursor.execute(f'insert into produtos values("{productName}", "{productPrice}")')
         db.commit()
         input('atualizado com sucesso')
-        init()
+        main()
     except Exception as err:
         handleError(err)
 
@@ -41,8 +41,8 @@ def updateProduct():
         
         rows = cursor.fetchall()
 
-        for r in rows:
-            print(f'Nome: {r[0]}\nPreço: {r[1]}\n\n')
+        products = getProducts()
+        print(products)
             
         productNameToUpdate = str(input('Digite o nome do produto que deseja atualizar -> '))
     except Exception as err:
@@ -56,7 +56,7 @@ def updateProduct():
             cursor.execute(f'update produtos set nome = "{productNewName}" where nome = "{productNameToUpdate}"')
             db.commit()
             input('dados atualizados!')
-            init()
+            main()
         except Exception as err:
             handleError(err)
 
@@ -66,7 +66,7 @@ def updateProduct():
             cursor.execute(f'update produtos set preco = "{productNewPrice}" where nome = "{productNameToUpdate}"')
             db.commit()
             input('dados atualizados!')
-            init()
+            main()
         except Exception as err:
                 handleError(err)
 
@@ -88,21 +88,22 @@ def getProducts():
 
         names = []
         prices = []
-        table = 'Nome\t\tPreço\n\n'
+        space = ' '
+        max_characters = 20
+        table = f'Nome{(space * max_characters)}Preço\n\n'
         for r in rows:
             names.append(r[0])
             prices.append(r[1])
 
         for i in range(0, (len(names) -1)):
-            table += f'{names[i]}\t\tR${prices[i]}\n'
+            table += f'{names[i]}{(space * (max_characters - len(names[i])))}R${prices[i]}\n'
         
-        print(table)
-        input('aperte enter para continuar')
-        init()
+        return table
+
     except Exception as err:
         handleError(err)
 
-def init():
+def main():
     clear()
     createDatabase()
 
@@ -118,6 +119,10 @@ def init():
     
     elif action == '3':
         clear()
-        getProducts()
+        products = getProducts()
         
-init()
+        print(products)
+        input('Aperte enter para continuar')
+        
+if __name__ == '__main__':
+    main()
