@@ -17,7 +17,7 @@ def clear():
 def handleError(err):
     clear()
     print(err)
-    input('enter to continue')
+    input('enter to continue\n')
     sys.exit()
 
 def createDatabase():
